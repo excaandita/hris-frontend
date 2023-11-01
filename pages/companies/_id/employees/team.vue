@@ -11,11 +11,11 @@
       <div class="flex flex-row items-center gap-4">
         <img src="/assets/images/user-f-1.png" width="70" alt="" />
         <div>
-          <div class="text-lg font-semibold">Andini Danna</div>
-          <p class="text-base text-grey">ke@manasihhbang.com</p>
+          <div class="text-lg font-semibold">{{ this.$store.state.employee.name }}</div>
+          <p class="text-base text-grey">{{ this.$store.state.employee.email }}</p>
         </div>
       </div>
-      <p class="text-right text-grey">Product Designer</p>
+      <p class="text-right text-grey">{{ this.$store.state.employee.role_name }}</p>
     </div>
 
     <!-- Your Teams -->
@@ -34,67 +34,33 @@
         <div
           class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:gap-10 lg:gap-3 mb-[50px]"
         >
-          <div class="items-center card py-6 md:!py-10 md:!px-[38px] !gap-y-0">
+          <p v-if="$fetchState.pending">Fetching Responsibility...</p>
+
+          <div v-else class="items-center card py-6 md:!py-10 md:!px-[38px] !gap-y-0" v-for="team in teams.result.data" :key="team.id">
             <input
               type="radio"
               name="productGrowth"
               id="productGrowth"
               class="absolute inset-0 checked:ring-2 ring-primary rounded-[26px] appearance-none"
+              :value="team.id"
+              @click="updateTeamId"
             />
-            <img src="/assets/svgs/ric-box.svg" alt="" />
+            <img :src="team.icon ? team.icon : 'https://via.placeholder.com/640x480.png/00cc88?text='+team.name+' '" class="w-24" alt="" />
             <div class="mt-6 mb-1 font-semibold text-center text-dark">
-              Product Growth
+              {{ team.name }}
             </div>
-            <p class="text-center text-grey">810 People</p>
-          </div>
-          <div class="items-center card py-6 md:!py-10 md:!px-[38px] !gap-y-0">
-            <input
-              type="radio"
-              name="marketing"
-              id="marketing"
-              class="absolute inset-0 checked:ring-2 ring-primary rounded-[26px] appearance-none"
-            />
-            <img src="/assets/svgs/ric-target.svg" alt="" />
-            <div class="mt-6 mb-1 font-semibold text-center text-dark">
-              Marketing
-            </div>
-            <p class="text-center text-grey">15,810 People</p>
-          </div>
-          <div class="items-center card py-6 md:!py-10 md:!px-[38px] !gap-y-0">
-            <input
-              type="radio"
-              name="globalization"
-              id="globalization"
-              class="absolute inset-0 checked:ring-2 ring-primary rounded-[26px] appearance-none"
-            />
-            <img src="/assets/svgs/ric-globe.svg" alt="" />
-            <div class="mt-6 mb-1 font-semibold text-center text-dark">
-              Globalization
-            </div>
-            <p class="text-center text-grey">300 People</p>
-          </div>
-          <div class="items-center card py-6 md:!py-10 md:!px-[38px] !gap-y-0">
-            <input
-              type="radio"
-              name="gamification"
-              id="gamification"
-              class="absolute inset-0 checked:ring-2 ring-primary rounded-[26px] appearance-none"
-            />
-            <img src="/assets/svgs/ric-award.svg" alt="" />
-            <div class="mt-6 mb-1 font-semibold text-center text-dark">
-              Gamification
-            </div>
-            <p class="text-center text-grey">25 People</p>
+            <p class="text-center text-grey">{{ team.employees_count }} People</p>
           </div>
         </div>
         <div class="flex justify-center">
-          <a
-            href="employees.html"
+          <button
+            @click="createEmployee()"
+            type="button"
             id="continueBtn"
             class="btn btn-primary"
           >
             Continue
-          </a>
+          </button>
         </div>
       </form>
     </section>
@@ -105,5 +71,65 @@
 export default {
   layout: 'form',
   middleware: 'auth',
+  data() {
+    return {
+      teams: [],
+    }
+  },
+  async fetch() {
+    const response = await this.$axios.get('/team', {
+      params: {
+        company_id: this.$route.params.id,
+        limit: 10
+      }
+    })
+
+    if (response.data && response.data.result) {
+      this.teams = response.data;
+    }
+  },
+  computed: {
+    team_id() {
+      return this.$store.state.employee.team_id
+    },
+  },
+  methods: {
+    updateTeamId(event) {
+      this.$store.commit('employee/updateTeamId', event.target.value)
+    },
+    async createEmployee() {
+      try {
+        // send employee create data to server api
+        let response = await this.$axios.post('/employee', {
+          'name': this.$store.state.employee.name,
+          'email': this.$store.state.employee.email,
+          'gender': this.$store.state.employee.gender,
+          'age': this.$store.state.employee.age,
+          'team_id': this.$store.state.employee.team_id,
+          'role_id': this.$store.state.employee.role_id,
+          'phone': this.$store.state.employee.phone,
+        })
+
+        // clear vuex
+        this.$store.commit('employee/updateName', '')
+        this.$store.commit('employee/updateEmail', '')
+        this.$store.commit('employee/updateAge', '')
+        this.$store.commit('employee/updateGender', '')
+        this.$store.commit('employee/updatePhone', '')
+        this.$store.commit('employee/updateTeamId', '')
+        this.$store.commit('employee/updateRoleId', '')
+        this.$store.commit('employee/updateRoleName', '')
+
+        // redirect to employee page
+        this.$router.push({
+          name: 'companies-id-employees'
+        })
+
+        console.log(response)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  },
 }
 </script>

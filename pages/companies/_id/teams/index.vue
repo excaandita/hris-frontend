@@ -52,8 +52,8 @@
             <div class="text-xl font-medium text-dark">Available</div>
             <p class="text-grey">Empower company</p>
           </div>
-          <a href="my-teams_create.html" class="btn btn-primary"
-            >Build New Team</a
+          <NuxtLink :to="{name: 'companies-id-teams-create'}" class="btn btn-primary"
+            >Build New Team</NuxtLink
           >
         </div>
       </div>
@@ -61,38 +61,22 @@
       <div
         class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:gap-10 lg:gap-3"
       >
-        <div class="items-center card py-6 md:!py-10 md:!px-[38px] !gap-y-0">
-          <a
-            href="#"
-            class="absolute inset-0 focus:ring-2 ring-primary rounded-[26px]"
-          ></a>
-          <img src="/assets/svgs/ric-box.svg" alt="" />
-          <div class="mt-6 mb-1 font-semibold text-center text-dark">
-            Growth Marketing
-          </div>
-          <p class="text-center text-grey">12 People</p>
+        <!-- Loading -->
+        <div v-if="$fetchState.pending">
+          <Loading />
         </div>
-        <div class="items-center card py-6 md:!py-10 md:!px-[38px] !gap-y-0">
-          <a
-            href="#"
+
+        <!-- Loading -->
+        <div class="items-center card py-6 md:!py-10 md:!px-[38px] !gap-y-0" v-else v-for="team in teams.result.data" :key="team.id">
+          <NuxtLink
+            :to="{name: 'companies-id-teams-id_team', params: {id_team: team.id}}"
             class="absolute inset-0 focus:ring-2 ring-primary rounded-[26px]"
-          ></a>
-          <img src="/assets/svgs/ric-target.svg" alt="" />
+          ></NuxtLink>
+          <img  :src="team.icon ? team.icon : 'https://via.placeholder.com/640x480.png/00cc88?text='+team.name+' '" alt="" class="rounded-lg"/>
           <div class="mt-6 mb-1 font-semibold text-center text-dark">
-            User Growth
+            {{team.name}}
           </div>
-          <p class="text-center text-grey">5,312 People</p>
-        </div>
-        <div class="items-center card py-6 md:!py-10 md:!px-[38px] !gap-y-0">
-          <a
-            href="#"
-            class="absolute inset-0 focus:ring-2 ring-primary rounded-[26px]"
-          ></a>
-          <img src="/assets/svgs/ric-award.svg" alt="" />
-          <div class="mt-6 mb-1 font-semibold text-center text-dark">
-            Gamification
-          </div>
-          <p class="text-center text-grey">893 People</p>
+          <p class="text-center text-grey">{{team.employees_count}} People</p>
         </div>
       </div>
     </section>
@@ -100,8 +84,30 @@
 </template>
 
 <script>
+import Loading from "@/components/utils/Loading.vue";
+
 export default {
   layout: 'dashboard',
   middleware: 'auth',
+  components: {
+    Loading
+  },
+  data() {
+    return {
+      teams: [],
+    }
+  },
+  async fetch() {
+    const response = await this.$axios.get('/team', {
+      params: {
+        company_id: this.$route.params.id,
+        limit: 10
+      }
+    })
+
+    if (response.data && response.data.result) {
+      this.teams = response.data;
+    }
+  }
 }
 </script>

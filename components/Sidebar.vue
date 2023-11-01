@@ -43,6 +43,10 @@
           <img src="/assets/svgs/ic-flag.svg" alt="" />
           Roles
         </NuxtLink>
+        <NuxtLink :to="{name: 'companies-id-roles'}" class="nav-link">
+          <img src="/assets/svgs/ic-briefcase.svg" alt="" />
+          Project
+        </NuxtLink>
       </div>
       <div class="flex flex-col gap-4">
         <div class="text-sm text-grey">Others</div>
@@ -62,10 +66,10 @@
           <img src="/assets/svgs/ic-settings.svg" alt="" />
           Settings
         </a>
-        <a href="#" class="nav-link">
+        <button @click="$auth.logout()" class="nav-link">
           <img src="/assets/svgs/ic-signout.svg" alt="" />
           Logout
-        </a>
+        </button>
       </div>
     </div>
   </div>
