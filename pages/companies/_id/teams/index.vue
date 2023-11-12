@@ -62,9 +62,7 @@
         class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:gap-10 lg:gap-3"
       >
         <!-- Loading -->
-        <div v-if="$fetchState.pending">
-          <Loading />
-        </div>
+        <Loading v-if="loading" />
 
         <!-- Loading -->
         <div class="items-center card py-6 md:!py-10 md:!px-[38px] !gap-y-0" v-else v-for="team in teams.result.data" :key="team.id">
@@ -72,7 +70,8 @@
             :to="{name: 'companies-id-teams-id_team', params: {id_team: team.id}}"
             class="absolute inset-0 focus:ring-2 ring-primary rounded-[26px]"
           ></NuxtLink>
-          <img  :src="team.icon ? team.icon : 'https://via.placeholder.com/640x480.png/00cc88?text='+team.name+' '" alt="" class="rounded-lg"/>
+          <!-- <img  :src="team.icon ? team.icon : 'https://via.placeholder.com/640x480.png/00cc88?text='+team.name+' '" alt="" class="rounded-lg"/> -->
+          <img  :src="team.icon ? api_image_url+'/'+team.icon.replace('public', 'storage')  : 'https://via.placeholder.com/640x480.png/00cc88?text='+team.name+' '" alt="" class="rounded-lg w-24"/>
           <div class="mt-6 mb-1 font-semibold text-center text-dark">
             {{team.name}}
           </div>
@@ -94,6 +93,8 @@ export default {
   },
   data() {
     return {
+      loading: true,
+      api_image_url: process.env.API_IMAGE_URL,
       teams: [],
     }
   },
@@ -107,6 +108,7 @@ export default {
 
     if (response.data && response.data.result) {
       this.teams = response.data;
+      this.loading = false;
     }
   }
 }

@@ -53,21 +53,35 @@
             <div class="mb-[30px]">
               <div class="flex items-center justify-between gap-6">
                 <div>
-                  <div class="text-xl font-medium text-dark">Documents</div>
-                  <p class="text-grey">Standard procedure</p>
+                  <div class="text-xl font-medium text-dark">Informasi</div>
+                  <p class="text-grey">Informasi Tentang Tim</p>
                 </div>
               </div>
             </div>
             <div class="card md:min-h-[468px] max-w-full">
-              <div class="m-auto text-center">
-                <div class="text-xl font-bold text-dark">No Documents</div>
-                <p class="text-grey mt-5 mb-[30px]">
-                  Add guidance or design style for <br />
-                  your employees in company
-                </p>
-                <button type="button" class="btn btn-primary">
-                  Upload File
-                </button>
+              <div
+                class="flex items-center justify-between pb-5 border-b border-gray-100"
+              >
+                <div class="flex items-center gap-4">
+                  <div>
+                    <div class="mb-1 font-semibold text-dark">
+                      Nama Tim
+                    </div>
+                    <p class="text-sm text-dark ml-[20px]">{{ team.name }}</p>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between pb-5 border-b border-gray-100"
+              >
+                <div class="flex items-center gap-4">
+                  <div>
+                    <div class="mb-1 font-semibold text-dark">
+                      Deskripsi Tim
+                    </div>
+                    <p class="text-sm text-dark ml-[20px]">{{ team.description }}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -78,8 +92,8 @@
             <div class="mb-[30px]">
               <div class="flex items-center justify-between gap-6">
                 <div>
-                  <div class="text-xl font-medium text-dark">Employees</div>
-                  <p class="text-grey">Who's in this team</p>
+                  <div class="text-xl font-medium text-dark">Karyawan</div>
+                  <p class="text-grey">Daftar Karyawan yang ada di Tim</p>
                 </div>
               </div>
             </div>
@@ -110,6 +124,32 @@
                     <p class="text-sm text-grey">{{ employee.role.name }}</p>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-4 mt-4"></div>
+        <div class="grid md:grid-cols-2 gap-11">
+          <div>
+            <!-- Section Header -->
+            <div class="mb-[30px]">
+              <div class="flex items-center justify-between gap-6">
+                <div>
+                  <div class="text-xl font-medium text-dark">Dokumen</div>
+                  <p class="text-grey">Tindakan Dokumen</p>
+                </div>
+              </div>
+            </div>
+            <div class="card md:min-h-[468px] max-w-full">
+              <div class="m-auto text-center">
+                <div class="text-xl font-bold text-dark">No Documents</div>
+                <p class="text-grey mt-5 mb-[30px]">
+                  Add guidance or design style for <br />
+                  your employees in company
+                </p>
+                <button type="button" class="btn btn-primary">
+                  Upload File
+                </button>
               </div>
             </div>
           </div>

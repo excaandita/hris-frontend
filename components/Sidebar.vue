@@ -50,6 +50,10 @@
       </div>
       <div class="flex flex-col gap-4">
         <div class="text-sm text-grey">Others</div>
+        <NuxtLink :to="{name: 'companies-id-cuti-page', params: {page: 1}}" class="nav-link">
+          <img src="/assets/svgs/ic-box.svg" alt="" />
+          Cuti
+        </NuxtLink>
         <a href="#" class="nav-link">
           <img src="/assets/svgs/ic-box.svg" alt="" />
           Insurances

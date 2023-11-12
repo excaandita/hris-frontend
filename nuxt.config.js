@@ -37,6 +37,7 @@ export default {
     // '@nuxtjs/tailwindcss',
     '@nuxt/postcss8',
     '@nuxtjs/dotenv',
+    '@nuxt-hero-icons/solid/nuxt',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
